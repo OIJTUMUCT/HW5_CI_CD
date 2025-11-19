@@ -1,0 +1,23 @@
+stages:
+  - test
+
+ml-pipeline:
+  stage: test
+  image: python:3.11
+
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install -r requirements.txt
+
+  script:
+    - python scripts/ml_pipeline.py
+
+  artifacts:
+    paths:
+      - reports/
+      - models/
+      - mlruns/
+    expire_in: 1 week
+
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
