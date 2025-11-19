@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  gitlab:
+    image: gitlab/gitlab-ce:latest
+    container_name: gitlab
+    restart: always
+    hostname: gitlab
+    ports:
+      - "8929:80"
+      - "8443:443"
+      - "2222:22"
+    volumes:
+      - gitlab-config:/etc/gitlab
+      - gitlab-logs:/var/log/gitlab
+      - gitlab-data:/var/opt/gitlab
+
+  gitlab-runner:
+    image: gitlab/gitlab-runner:latest
+    container_name: gitlab-runner
+    restart: always
+    depends_on:
+      - gitlab
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - hw5_ci_cd_gitlab-runner-config:/etc/gitlab-runner
+    environment:
+      CI_SERVER_URL: http://gitlab
+      DOCKER_TLS_CERTDIR: ""
+
+volumes:
+  gitlab-config:
+    external: true
+  gitlab-logs:
+    external: true
+  gitlab-data:
+    external: true
+  hw5_ci_cd_gitlab-runner-config:
+    external: true
