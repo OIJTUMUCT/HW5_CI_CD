@@ -20,4 +20,4 @@ ml-pipeline:
     expire_in: 1 week
 
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "web"'
